@@ -1,0 +1,1 @@
+This is the baseline for NodeKC web projects.
