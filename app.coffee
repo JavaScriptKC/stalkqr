@@ -31,6 +31,9 @@ app.get '/generate', (req, res) ->
 app.get '/scan/:code', (req, res) ->
   res.redirect '/activate/' + req.params.code, 301
 
+app.get '/activate/:code', (req, res) ->
+  res.render 'activate', code: req.params.code
+
 app.listen port
 
 console.log 'server listening on port ' + port
