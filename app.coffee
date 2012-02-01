@@ -5,7 +5,9 @@ app = express.createServer()
 port = process.env.PORT || 3000
 path = require 'path'
 stylus = require 'stylus'
+apikey = process.ENV.BITLY_API_KEY
 
+console.log apikey
 app.configure 'development', () ->
   app.use stylus.middleware { src: path.join(__dirname, 'public') }
   app.use express.logger { format: ':method :url' }
