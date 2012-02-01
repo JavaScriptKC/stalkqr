@@ -5,9 +5,8 @@ app = express.createServer()
 port = process.env.PORT || 3000
 path = require 'path'
 stylus = require 'stylus'
-apikey = process.ENV.BITLY_API_KEY
+bitly = require './bitly'
 
-console.log apikey
 app.configure 'development', () ->
   app.use stylus.middleware { src: path.join(__dirname, 'public') }
   app.use express.logger { format: ':method :url' }
@@ -21,9 +20,12 @@ app.configure 'production', () ->
 app.set 'views', path.join(__dirname, 'views')
 app.set 'view engine', 'jade'
 
-app.get '/', (req, res) ->
+app.get '/:user/:code', bitly.claim, (req, res) ->
   res.render 'layout', res.data
 
+app.get '/generate', bitly.generate, (req, res) ->
+  res.render 'layout', res.data
+  
 app.listen port
 
 console.log 'server listening on port ' + port

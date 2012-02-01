@@ -1,4 +1,11 @@
-You will want the environment variable set up with your bitly api key.
+Visit https://bitly.com/ and sign up.
 
-MAC: export BITLY_API_KEY=<key here>
-WINDOWS: set BITLY_API_KEY=<key here>
+You will then need to set up your environment variables with your bitly API information.
+
+MAC: 
+export BITLY_API_KEY=<key here>
+export BITLY_API_USERNAME=<username>
+
+WINDOWS: 
+set BITLY_API_KEY=<key here>
+set BITLY_API_USERNAME=<username>
