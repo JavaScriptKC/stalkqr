@@ -22,6 +22,18 @@ app.set 'view engine', 'jade'
 app.get '/', (req, res) ->
   res.render 'layout', res.data
 
+app.get '/generate', (req, res) ->
+  uuid = new Date().getTime()
+  url = 'http://' + req.header('host') + '/scan/' + uuid
+
+  res.render 'generate', url: url
+
+app.get '/scan/:code', (req, res) ->
+  res.redirect '/activate/' + req.params.code, 301
+
+app.get '/activate/:code', (req, res) ->
+  res.render 'activate', code: req.params.code
+
 app.listen port
 
 console.log 'server listening on port ' + port
