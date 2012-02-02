@@ -8,3 +8,18 @@ html(lang="en")
     h1 NodeKC
 
     a(href='http://nodekc.org', title='Visit the NodeKC website.') Visit NodeKC
+
+    - if (typeof(bitly) != 'undefined')
+      h2 We've generated a new QR code for you.
+      a(href=bitly.url) 
+        img(src=bitly.url + '.qrcode') 
+        br 
+        #{bitly.url}
+
+    - if (typeof(encounter) != 'undefined')
+      p It seems as though you've met 
+        em #{encounter.username}
+        . Dummy gave you code
+        em #{encounter.code} 
+        and you were likely directed here from 
+        em #{encounter.referrer}
