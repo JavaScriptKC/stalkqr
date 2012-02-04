@@ -12,12 +12,12 @@ This project will generate URL's that can be used by others to add your social c
 
 ##Twitter API Key 
 
-visit http://developer.twitter.com and create an application. Once created, you'll be given an API key and SECRET. It's important that you set the callback url correctly.
+Visit http://developer.twitter.com and create an application. Once created, you'll be given an API key and SECRET. It's important that you set the callback url correctly.
 
 ###Set up your environment variables
 
-export TWITTER_CONSUMER_KEY=<consumerkey>
-export TWITTER_CONSUMER_SECRET=<secret>
+    export TWITTER_CONSUMER_KEY=<consumerkey>
+    export TWITTER_CONSUMER_SECRET=<secret>
 
 ##Github API Key
 
@@ -25,5 +25,5 @@ https://github.com/account/applications Once again, it's important to set the ca
 
 ##Set up your environment variables
 
-export GITHUB_CLIENT_ID=<clientid>
-export GITHUB_CLIENT_SECRET=<secret>
+    export GITHUB_CLIENT_ID=<clientid>
+    export GITHUB_CLIENT_SECRET=<secret>
