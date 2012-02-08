@@ -11,8 +11,13 @@ TwitterStrategy = require('passport-twitter').Strategy;
 
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
+TWITTER_CALLBACK_URL = process.env.CALLBACK_BASE_URL + "/auth/twitter/callback"
+
 GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET
+GITHUB_CALLBACK_URL = process.env.CALLBACK_BASE_URL + "/auth/github/callback"
+
+SESSION_SECRET = process.env.SESSION_SECRET
 
 ensureAuthenticated = (req, res, next) ->
   return next() if req.isAuthenticated()
@@ -28,7 +33,7 @@ passport.deserializeUser (obj, done) ->
 passport.use new GitHubStrategy {
     clientID: GITHUB_CLIENT_ID,
     clientSecret: GITHUB_CLIENT_SECRET,
-    callbackURL: "http://127.0.0.1:3000/auth/github/callback"},
+    callbackURL: GITHUB_CALLBACK_URL},
   (accessToken, refreshToken, profile, done) ->
     process.nextTick () ->
       done null, profile
@@ -37,7 +42,7 @@ passport.use new GitHubStrategy {
 passport.use new TwitterStrategy {
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"},
+    callbackURL: TWITTER_CALLBACK_URL},
   (token, tokenSecret, profile, done) ->
     process.nextTick () ->
       done(null, profile)
@@ -49,7 +54,7 @@ app.configure 'development', () ->
   app.use express.cookieParser()
   app.use express.bodyParser()
   app.use express.methodOverride()
-  app.use express.session secret: 'nodekc hacking'
+  app.use express.session secret: 'stalkqr'
   app.use passport.initialize()
   app.use passport.session()
   app.use express.static path.join(__dirname, 'public')
@@ -57,6 +62,10 @@ app.configure 'development', () ->
 app.configure 'production', () ->
   app.use stylus.middleware { src: path.join(__dirname, 'public'), compress: true }
   app.use express.logger { format: ':method :url' }
+  app.use express.cookieParser()
+  app.use express.bodyParser()
+  app.use express.methodOverride()
+  app.use express.session secret: SESSION_SECRET
   app.use passport.initialize()
   app.use passport.session()
   app.use express.static path.join(__dirname, 'public')
@@ -73,24 +82,21 @@ app.get '/account', ensureAuthenticated, (req, res) ->
 app.get '/login', (req, res) ->
   res.render 'login', res.data
 
-app.get '/auth/github', passport.authenticate('github'), null
+app.get '/auth/github', passport.authenticate('github')
 
-app.get '/auth/twitter', passport.authenticate('twitter'), null
+app.get '/auth/twitter', passport.authenticate('twitter')
 
 app.get '/auth/github/callback', 
-  passport.authenticate 'github', failureRedirect: '/login',
-  (req, res) ->
+  passport.authenticate('github', failureRedirect: '/login'), (req, res) ->
     res.redirect '/'
 
 app.get '/auth/twitter/callback', 
-  passport.authenticate 'twitter', failureRedirect: '/login',
-  (req, res) ->
+  passport.authenticate('twitter', failureRedirect: '/login'), (req, res) ->
     res.redirect '/'
 
 app.get '/generate', (req, res) ->
   uuid = new Date().getTime()
   url = 'http://' + req.header('host') + '/scan/' + uuid
-
   res.render 'generate', url: url
 
 app.get '/scan/:code', (req, res) ->

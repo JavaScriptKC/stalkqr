@@ -1,1 +1,1 @@
-ueb: node runner.js
+web: node runner.js
