@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 express = require 'express'
 app = express.createServer()
 port = process.env.PORT || 3000
@@ -30,19 +28,23 @@ passport.serializeUser (user, done) ->
 passport.deserializeUser (obj, done) ->
   done(null, obj);
 
-passport.use new GitHubStrategy {
-    clientID: GITHUB_CLIENT_ID,
-    clientSecret: GITHUB_CLIENT_SECRET,
-    callbackURL: GITHUB_CALLBACK_URL},
-  (accessToken, refreshToken, profile, done) ->
-    done null, profile
+twitterDone = (accessToken, refreshToken, profile, done) ->
+  done null, profile
 
-passport.use new TwitterStrategy {
-    consumerKey: TWITTER_CONSUMER_KEY,
-    consumerSecret: TWITTER_CONSUMER_SECRET,
-    callbackURL: TWITTER_CALLBACK_URL},
-  (token, tokenSecret, profile, done) ->
-    done(null, profile)
+passport.use new GitHubStrategy
+  clientID: GITHUB_CLIENT_ID
+  clientSecret: GITHUB_CLIENT_SECRET
+  callbackURL: GITHUB_CALLBACK_URL
+  twitterDone
+
+githubDone = (accessToken, tokenSecret, profile, done) ->
+  done null, profile
+
+passport.use new TwitterStrategy
+  consumerKey: TWITTER_CONSUMER_KEY
+  consumerSecret: TWITTER_CONSUMER_SECRET
+  callbackURL: TWITTER_CALLBACK_URL
+  githubDone
 
 app.configure () ->
   app.use express.logger format: ':method :url :status'
@@ -51,18 +53,17 @@ app.configure () ->
   app.use express.session secret: SESSION_SECRET
   app.use passport.initialize()
   app.use passport.session()
-  app.use app.router
-  app.use express.static path.join(__dirname, 'public')
-  app.set 'views', path.join(__dirname, 'views')
+  app.use express.static path.join __dirname, 'public'
+  app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
 
 app.configure 'development', () ->
   app.use stylus.middleware 
-    src: path.join(__dirname, 'public')
+    src: path.join __dirname, 'public' 
   
 app.configure 'production', () ->
   app.use stylus.middleware 
-    src: path.join(__dirname, 'public')
+    src: path.join __dirname, 'public' 
     compress: true
 
 app.get '/', (req, res) ->
