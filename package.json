@@ -15,6 +15,6 @@
   },
   "main": "runner.js",
   "scripts": {
-    "test": "vows tests/*-test"
+    "test": "vows"
   }
 }
