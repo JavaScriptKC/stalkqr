@@ -1,7 +1,32 @@
 !!! 5
 html(lang="en")
-  head
-    title NodeKC baseline
-    link(rel='stylesheet', href='/css/app.css')
+	head
+		title linQR - social linking
+		link(rel='stylesheet', href='/bootstrap/css/bootstrap.css')
+		script(src='/scripts/knockout-2.0.0.js')
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
 
-  body!= body
+	body
+
+		.navbar
+			.navbar-inner
+				.container
+					a.brand(href='/') 
+						img(src='/images/linQR.png')
+					ul.nav
+						li.active
+							a(href='/') Home
+						li
+							a(href='/how') How It Works
+						li
+							a(href='/help') Help
+					ul.nav.pull-right
+						li
+							if loggedIn
+								a(href="/signout") Sign Out
+							else
+								a.janrainEngage(href="#") Sign In
+
+		.container
+			.content
+				!= body

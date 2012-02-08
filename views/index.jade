@@ -1,0 +1,11 @@
+.row
+	.span2 
+		button.btn.btn-primary(data-bind='click: generateNew') Generate QR
+	.span10	
+		ul.thumbnails(data-bind='foreach: generatedCodes')
+			li.span2
+				a.thumbnail(href='#')
+					img(data-bind='attr: {src: url}')
+
+	script(src='/scripts/janrain.js')
+	script(src='/scripts/generate.js')

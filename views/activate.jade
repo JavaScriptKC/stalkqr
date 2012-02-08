@@ -1,1 +1,10 @@
-p Activated code #{code}
+.row
+	.span12 this linQR Code has not been activated, would you like to activate it?
+	.span12
+		a#activate.btn.btn-primary(data-id='#{id}') Activate
+	.span12
+		#activationSuccess.alert.alert-success(style="display:none;")
+			strong Success! 
+			| this code now belongs to you. Please add any contact information you would like associated with it.
+
+script(src='/scripts/activate.js')
