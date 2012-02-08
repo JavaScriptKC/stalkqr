@@ -1,13 +1,26 @@
-codes =
-  generate: (request, response) ->
-    uuid = new Date().getTime()
-    url = 'http://' + request.header('host') + '/scan/' + uuid
-    response.render 'generate', url: url
+internal =
+  generate: (code, host, render) ->
+    url = 'http://' + host + '/scan/' + code
+    render 'codes/generate', url: url
 
-  scan: (request, response) ->
-    response.redirect '/activate/' + request.params.code, 301
+  scan: (code, redirect) ->
+    url = '/activate/' + code
+    redirect url, temporarily = 301
 
   activate: (request, response) ->
     response.render 'activate', code: request.params.code
 
-module.exports = codes
+module.exports =
+  _internal: internal,
+
+  scan: (request, response) ->
+    code = request.params.code
+
+    _internal.scan code, response.redirect
+
+  generate: (request, response) ->
+    code = new Date().getTime()
+    host = request.header 'host'
+    render = response.render
+
+    _internal.generate code, host, render

@@ -1,10 +1,20 @@
 {
   "name": "stalkqr",
   "version": "0.0.1",
+  "repository": {
+    "url": "https://github.com/nodekc/stalkqr"
+  },
   "dependencies": {
     "express": "v2.5.6",
     "coffee-script": "v1.2.0",
     "jade": "v0.20.0",
     "stylus": "v0.22.5"
+  },
+  "devDependencies": {
+    "vows": "~v0.6.1"
+  },
+  "main": "runner.js",
+  "scripts": {
+    "test": "vows tests/*-test"
   }
 }
