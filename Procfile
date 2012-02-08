@@ -1,1 +1,1 @@
-web: coffee app.coffee
+ueb: node runner.js
