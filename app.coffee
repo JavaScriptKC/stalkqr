@@ -3,6 +3,7 @@
 express = require 'express'
 app = express.createServer()
 port = process.env.PORT || 3000
+url = require 'url'
 path = require 'path'
 stylus = require 'stylus'
 passport = require 'passport'
@@ -11,13 +12,13 @@ TwitterStrategy = require('passport-twitter').Strategy;
 
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
-TWITTER_CALLBACK_URL = process.env.CALLBACK_BASE_URL + '/auth/twitter/callback'
+TWITTER_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/twitter/callback'
 
 GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET
-GITHUB_CALLBACK_URL = process.env.CALLBACK_BASE_URL + '/auth/github/callback'
+GITHUB_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/github/callback'
 
-SESSION_SECRET = process.env.SESSION_SECRET
+SESSION_SECRET = process.env.SESSION_SECRET || 'stalkqr'
 
 ensureAuthenticated = (req, res, next) ->
   return next() if req.isAuthenticated()
@@ -34,40 +35,40 @@ passport.use new GitHubStrategy {
     clientSecret: GITHUB_CLIENT_SECRET,
     callbackURL: GITHUB_CALLBACK_URL},
   (accessToken, refreshToken, profile, done) ->
-    process.nextTick () ->
-      done null, profile
+    done null, profile
 
 passport.use new TwitterStrategy {
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
     callbackURL: TWITTER_CALLBACK_URL},
   (token, tokenSecret, profile, done) ->
-    process.nextTick () ->
-      done(null, profile)
+    done(null, profile)
 
 app.configure () ->
-  app.use express.logger { format: ':method :url' }
+  app.use express.logger format: ':method :url :status'
   app.use express.cookieParser()
   app.use express.bodyParser()
-  app.use express.methodOverride()
+  app.use express.session secret: SESSION_SECRET
   app.use passport.initialize()
   app.use passport.session()
+  app.use app.router
   app.use express.static path.join(__dirname, 'public')
   app.set 'views', path.join(__dirname, 'views')
   app.set 'view engine', 'jade'
 
 app.configure 'development', () ->
-  app.use stylus.middleware { src: path.join(__dirname, 'public') }
-  app.use express.session secret: 'stalkqr'
+  app.use stylus.middleware 
+    src: path.join(__dirname, 'public')
   
 app.configure 'production', () ->
-  app.use stylus.middleware { src: path.join(__dirname, 'public'), compress: true }
-  app.use express.session secret: SESSION_SECRET
+  app.use stylus.middleware 
+    src: path.join(__dirname, 'public')
+    compress: true
 
 app.get '/', (req, res) ->
   res.render 'index', 
     user: req.user
-    isLoggedIn: req.user?
+    isLoggedIn: req.isAuthenticated()
 
 app.get '/account', ensureAuthenticated, (req, res) ->
   res.render 'account', user: req.user
@@ -81,11 +82,11 @@ app.get '/auth/twitter', passport.authenticate('twitter')
 
 app.get '/auth/github/callback', 
   passport.authenticate('github', failureRedirect: '/login'), (req, res) ->
-    res.redirect '/account'
+    res.redirect '/'
 
 app.get '/auth/twitter/callback', 
   passport.authenticate('twitter', failureRedirect: '/login'), (req, res) ->
-    res.redirect '/account'
+    res.redirect '/'
 
 app.get '/generate', (req, res) ->
   uuid = new Date().getTime()
