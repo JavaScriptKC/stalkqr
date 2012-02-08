@@ -58,10 +58,14 @@ app.get '/signout', (req, res) ->
   res.redirect '/', 301
 
 app.post '/generate', (req, res) ->
-  storage.Codes.generate {}, (created) ->
+  storage.Codes.generate owner: req.session.authId, (created) ->
     localUrl = 'http://' + req.header('host') + '/scan/' + created[0]._id
     qrImgUrl = "https://chart.googleapis.com/chart?cht=qr&chs=128x128&chl=" + localUrl
     res.send url: qrImgUrl
+
+app.post '/event/create', (req, res) ->
+  storage.Events.create {owner: req.session.authId, name: req.body.name}, ->
+    res.send result:true
 
 app.get '/scan/:id', (req, res) ->
   storage.Codes.get req.params.id, (code) ->

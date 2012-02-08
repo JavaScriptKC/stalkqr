@@ -10,7 +10,14 @@
           url: result.url
         });
       });
-    }
+    },
+    events: new ko.observableArray([
+      {
+        name: 'one'
+      }, {
+        name: 'two'
+      }
+    ])
   };
 
   ko.applyBindings(vm);

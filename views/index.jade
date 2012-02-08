@@ -1,6 +1,13 @@
 .row
 	.span2 
+		h2 Events
+	.span10(style='text-align:center')
 		button.btn.btn-primary(data-bind='click: generateNew') Generate QR
+.row
+	.span2
+		ul#events.nav.nav-pills.nav-stacked(data-bind='foreach: events')
+			li
+				a.event(href='#', data-bind='text: name')
 	.span10	
 		ul.thumbnails(data-bind='foreach: generatedCodes')
 			li.span2
