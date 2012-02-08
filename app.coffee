@@ -8,7 +8,7 @@ stylus = require 'stylus'
 storage = require './storage'
 janrain = require 'janrain-api'
 
-engageAPI = janrain 'd2f59eb384bb820fa102e8dd67229f08adbe9e8a'
+engageAPI = janrain process.env.JANRAIN_KEY
 
 app.configure ->
   app.use express.logger { format: ':method :url' }
