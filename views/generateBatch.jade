@@ -1,0 +1,5 @@
+ul
+  for code in codes
+    li
+      a(href="/scan/#{code}")
+        != partial('generate', {url: "/scan/#{code}"})
