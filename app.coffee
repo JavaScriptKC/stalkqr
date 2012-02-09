@@ -10,7 +10,7 @@ TwitterStrategy = require('passport-twitter').Strategy;
 
 codes = require './controllers/codes'
 
-###
+
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
 TWITTER_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/twitter/callback'
@@ -48,14 +48,14 @@ passport.use new TwitterStrategy
   consumerSecret: TWITTER_CONSUMER_SECRET
   callbackURL: TWITTER_CALLBACK_URL
   githubDone
-###
+
 app.configure () ->
   app.use express.logger format: ':method :url :status'
   app.use express.cookieParser()
   app.use express.bodyParser()
-  #app.use express.session secret: SESSION_SECRET
-  #app.use passport.initialize()
-  #app.use passport.session()
+  app.use express.session secret: SESSION_SECRET
+  app.use passport.initialize()
+  app.use passport.session()
   app.use express.static path.join __dirname, 'public'
   app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
@@ -74,8 +74,8 @@ app.get '/', (req, res) ->
     user: req.user
     isLoggedIn: req.isAuthenticated()
 
-#app.get '/account', ensureAuthenticated, (req, res) ->
-  #res.render 'account', user: req.user
+app.get '/account', ensureAuthenticated, (req, res) ->
+  res.render 'account', user: req.user
   
 app.get '/login', (req, res) ->
   res.render 'login', res.data
