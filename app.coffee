@@ -4,9 +4,12 @@ port = process.env.PORT || 3000
 url = require 'url'
 path = require 'path'
 stylus = require 'stylus'
+uuid = require 'node-uuid'
 passport = require 'passport'
 GitHubStrategy = require('passport-github').Strategy
 TwitterStrategy = require('passport-twitter').Strategy;
+
+event_code_map = {}
 
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
@@ -100,6 +103,13 @@ app.get '/scan/:code', (req, res) ->
 app.get '/activate/:code', (req, res) ->
   res.render 'activate', code: req.params.code
 
+app.post '/generate', (req, res) ->
+  codes = (uuid.v4() for number  in [0...req.body.number])
+  event_code_map[req.body.event_id] or= []
+  event_code_map[req.body.event_id].concat codes
+  res.render 'generateBatch', codes: codes
+
 app.listen port
 
 console.log 'server listening on port ' + port
+
