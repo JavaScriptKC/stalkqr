@@ -8,6 +8,9 @@ passport = require 'passport'
 GitHubStrategy = require('passport-github').Strategy
 TwitterStrategy = require('passport-twitter').Strategy;
 
+codes = require './controllers/codes'
+
+
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
 TWITTER_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/twitter/callback'
@@ -90,9 +93,21 @@ app.get '/auth/twitter/callback',
     res.redirect '/'
 
 app.get '/generate', (req, res) ->
-  uuid = new Date().getTime()
-  url = 'http://' + req.header('host') + '/scan/' + uuid
-  res.render 'generate', url: url
+  data = codes.generateOne req.header ('host')
+  res.render 'generate', data
+
+app.get '/generate/:number', (req, res) ->
+  data = codes.generateMany(req.header('host'), req.params.number, null)
+  res.render 'generate_bulk', data
+
+app.get '/generate/event/:event', (req, res) ->
+  data = codes.generateOne(req.header('host'), req.params.event)
+  console.log data
+  res.render 'generate', data
+
+app.get '/generate/:number/event/:event', (req, res) ->
+  data = codes.generateMany(req.header('host'), req.params.number, req.params.event)
+  res.render 'generate_bulk', data
 
 app.get '/scan/:code', (req, res) ->
   res.redirect '/activate/' + req.params.code, 301
