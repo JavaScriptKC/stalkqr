@@ -8,6 +8,9 @@ passport = require 'passport'
 GitHubStrategy = require('passport-github').Strategy
 TwitterStrategy = require('passport-twitter').Strategy;
 
+codes = require './controllers/codes'
+
+###
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
 TWITTER_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/twitter/callback'
@@ -45,14 +48,14 @@ passport.use new TwitterStrategy
   consumerSecret: TWITTER_CONSUMER_SECRET
   callbackURL: TWITTER_CALLBACK_URL
   githubDone
-
+###
 app.configure () ->
   app.use express.logger format: ':method :url :status'
   app.use express.cookieParser()
   app.use express.bodyParser()
-  app.use express.session secret: SESSION_SECRET
-  app.use passport.initialize()
-  app.use passport.session()
+  #app.use express.session secret: SESSION_SECRET
+  #app.use passport.initialize()
+  #app.use passport.session()
   app.use express.static path.join __dirname, 'public'
   app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
@@ -71,8 +74,8 @@ app.get '/', (req, res) ->
     user: req.user
     isLoggedIn: req.isAuthenticated()
 
-app.get '/account', ensureAuthenticated, (req, res) ->
-  res.render 'account', user: req.user
+#app.get '/account', ensureAuthenticated, (req, res) ->
+  #res.render 'account', user: req.user
   
 app.get '/login', (req, res) ->
   res.render 'login', res.data
@@ -90,9 +93,21 @@ app.get '/auth/twitter/callback',
     res.redirect '/'
 
 app.get '/generate', (req, res) ->
-  uuid = new Date().getTime()
-  url = 'http://' + req.header('host') + '/scan/' + uuid
-  res.render 'generate', url: url
+  data = codes.generateOne req.header ('host')
+  res.render 'generate', data
+
+app.get '/generate/:number', (req, res) ->
+  data = codes.generateMany(req.header('host'), req.params.number, null)
+  res.render 'generate_bulk', data
+
+app.get '/generate/event/:event', (req, res) ->
+  data = codes.generateOne(req.header('host'), req.params.event)
+  console.log data
+  res.render 'generate', data
+
+app.get '/generate/:number/event/:event', (req, res) ->
+  data = codes.generateMany(req.header('host'), req.params.number, req.params.event)
+  res.render 'generate_bulk', data
 
 app.get '/scan/:code', (req, res) ->
   res.redirect '/activate/' + req.params.code, 301
