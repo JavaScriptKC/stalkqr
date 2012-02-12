@@ -9,6 +9,10 @@
       "passport": "0.1.6",
       "passport-twitter": "0.1.0",
       "passport-github": "0.1.0"
+   },
+   
+   "devDependencies": {
+      "vows": "0.6.1"
    }
 }  
              

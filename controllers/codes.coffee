@@ -5,7 +5,7 @@ generateUniqueIdentifier = (a, b) ->
   b
 
 generate = (count = 1) ->
-	(generateUniqueIdentifier() for x in [0...count])
+	if count > 0 then (generateUniqueIdentifier() for x in [0...count]) else []
 			
 codes = 
 	generate: generate
