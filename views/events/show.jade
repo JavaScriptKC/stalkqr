@@ -1,0 +1,15 @@
+h2= event.name
+
+ul
+  li
+    a(href='/event/#{event.name}/generate') Generate codes
+  li
+    a(href='/events') Back to list
+
+h3 Codes
+
+ul.bulk_urls
+  for c in event.codes
+    li
+      a(href=base_url + c, title=c)
+        img(src="https://chart.googleapis.com/chart?cht=qr&chs=128x128&chl=#{base_url + c}") 
