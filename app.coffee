@@ -5,19 +5,9 @@ url = require 'url'
 path = require 'path'
 stylus = require 'stylus'
 passport = require 'passport'
-GitHubStrategy = require('passport-github').Strategy
-TwitterStrategy = require('passport-twitter').Strategy;
-
 codes = require './controllers/codes'
-
-
-TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY
-TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET
-TWITTER_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/twitter/callback'
-
-GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID
-GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET
-GITHUB_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/github/callback'
+strategies = require './config/strategies'
+event = require './models/event'
 
 SESSION_SECRET = process.env.SESSION_SECRET || 'stalkqr'
 
@@ -26,30 +16,16 @@ ensureAuthenticated = (req, res, next) ->
   res.redirect '/login'
 
 passport.serializeUser (user, done) ->
-  done(null, user);
+  done null, user
 
 passport.deserializeUser (obj, done) ->
-  done(null, obj);
+  done null, obj
 
-twitterDone = (accessToken, refreshToken, profile, done) ->
-  done null, profile
+passport.use strategies.twitter
 
-passport.use new GitHubStrategy
-  clientID: GITHUB_CLIENT_ID
-  clientSecret: GITHUB_CLIENT_SECRET
-  callbackURL: GITHUB_CALLBACK_URL
-  twitterDone
+passport.use strategies.github
 
-githubDone = (accessToken, tokenSecret, profile, done) ->
-  done null, profile
-
-passport.use new TwitterStrategy
-  consumerKey: TWITTER_CONSUMER_KEY
-  consumerSecret: TWITTER_CONSUMER_SECRET
-  callbackURL: TWITTER_CALLBACK_URL
-  githubDone
-
-app.configure () ->
+app.configure ->
   app.use express.logger format: ':method :url :status'
   app.use express.cookieParser()
   app.use express.bodyParser()
@@ -60,11 +36,11 @@ app.configure () ->
   app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
 
-app.configure 'development', () ->
+app.configure 'development', ->
   app.use stylus.middleware 
     src: path.join __dirname, 'public' 
   
-app.configure 'production', () ->
+app.configure 'production', ->
   app.use stylus.middleware 
     src: path.join __dirname, 'public' 
     compress: true
@@ -74,9 +50,6 @@ app.get '/', (req, res) ->
     user: req.user
     isLoggedIn: req.isAuthenticated()
 
-app.get '/account', ensureAuthenticated, (req, res) ->
-  res.render 'account', user: req.user
-  
 app.get '/login', (req, res) ->
   res.render 'login', res.data
 
@@ -92,27 +65,46 @@ app.get '/auth/twitter/callback',
   passport.authenticate('twitter', failureRedirect: '/login'), (req, res) ->
     res.redirect '/'
 
-app.get '/generate', (req, res) ->
-  data = codes.generateOne req.header ('host')
-  res.render 'generate', data
+app.get '/generate', ensureAuthenticated, (req, res) ->
+  event.list req.user.id, (err, events) ->
+    res.render 'generate', 
+      event_name: null
+      events: events
 
-app.get '/generate/:number', (req, res) ->
-  data = codes.generateMany(req.header('host'), req.params.number, null)
-  res.render 'generate_bulk', data
+app.post '/generate', ensureAuthenticated, (req, res) ->
+  generate_count = req.body.count
+  event_name = req.body.event
+  event.findByName req.user.id, event_name, (err, event) ->
+    event.addCodes codes.generate(generate_count), ->
+      res.redirect '/event/' + event_name
 
-app.get '/generate/event/:event', (req, res) ->
-  data = codes.generateOne(req.header('host'), req.params.event)
-  console.log data
-  res.render 'generate', data
+app.get '/event/:event_name/generate', ensureAuthenticated, (req, res) ->
+  event.list req.user.id, (err, events) ->
+    res.render 'generate',
+      event_name: req.params.event_name
+      events: events
+      
+app.get '/event/new', ensureAuthenticated, (req, res) ->
+  res.render 'events/new'
 
-app.get '/generate/:number/event/:event', (req, res) ->
-  data = codes.generateMany(req.header('host'), req.params.number, req.params.event)
-  res.render 'generate_bulk', data
+app.get '/event/:event_name', ensureAuthenticated, (req, res) ->
+  event.findByName req.user.id, req.params.event_name, (err, event) ->
+    res.render 'events/show',
+      event: event 
+      base_url: 'http://' + req.headers['host'] + '/scan/'
+
+app.get '/events', ensureAuthenticated, (req, res) ->
+  event.list req.user.id, (err, events) ->
+    res.render 'events/list', events: events
+
+app.post '/event', ensureAuthenticated, (req, res) ->
+  event.create req.user.id, req.body.name, (err, event) ->
+    res.redirect '/event/' + event.name
 
 app.get '/scan/:code', (req, res) ->
   res.redirect '/activate/' + req.params.code, 301
 
-app.get '/activate/:code', (req, res) ->
+app.get '/activate/:code', ensureAuthenticated, (req, res) ->
   res.render 'activate', code: req.params.code
 
 app.listen port

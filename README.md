@@ -10,20 +10,34 @@ This project will generate URL's that can be used by others to add your social c
 
 #Authentication setup
 
-##Twitter API Key 
+###Set up your environment variables
+
+#### UNIX    
+    export KEY=value
+
+#### Windows
+    set KEY=value
+
+#### Heroku
+    heroku config:add KEY=value
+
+##Twitter API Key
+  
+    TWITTER_CONSUMER_KEY
+    TWITTER_CONSUMER_SECRET
 
 Visit http://developer.twitter.com and create an application. Once created, you'll be given an API key and SECRET. It's important that you set the callback url correctly.
 
-###Set up your environment variables
-
-    export TWITTER_CONSUMER_KEY=<consumerkey>
-    export TWITTER_CONSUMER_SECRET=<secret>
-
 ##Github API Key
+
+    GITHUB_CLIENT_ID
+    GITHUB_CLIENT_SECRET
 
 https://github.com/account/applications Once again, it's important to set the callback url correctly for where the application is hosted.
 
-##Set up your environment variables
+##Base URL for callbacks
 
-    export GITHUB_CLIENT_ID=<clientid>
-    export GITHUB_CLIENT_SECRET=<secret>
+    CALLBACK_BASE_URL
+
+You will need to set up your base callback url. This is the root url to where the site is hosted. Examples include: http://localhost:3000 or http://hazy-mist-1110.herokuapp.com 
+
