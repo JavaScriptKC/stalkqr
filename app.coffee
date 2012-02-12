@@ -68,6 +68,7 @@ app.get '/auth/twitter/callback',
 app.get '/generate', ensureAuthenticated, (req, res) ->
   event.list req.user.id, (err, events) ->
     res.render 'generate', 
+      event_name: null
       events: events
 
 app.post '/generate', ensureAuthenticated, (req, res) ->
@@ -79,7 +80,7 @@ app.post '/generate', ensureAuthenticated, (req, res) ->
 
 app.get '/event/:event_name/generate', ensureAuthenticated, (req, res) ->
   event.list req.user.id, (err, events) ->
-    res.render 'generate', 
+    res.render 'generate',
       event_name: req.params.event_name
       events: events
       
