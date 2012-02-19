@@ -4,34 +4,17 @@ port = process.env.PORT || 3000
 url = require 'url'
 path = require 'path'
 stylus = require 'stylus'
-passport = require 'passport'
 codes = require './controllers/codes'
-strategies = require './config/strategies'
 event = require './models/event'
 
 SESSION_SECRET = process.env.SESSION_SECRET || 'stalkqr'
-
-ensureAuthenticated = (req, res, next) ->
-  return next() if req.isAuthenticated()
-  res.redirect '/login'
-
-passport.serializeUser (user, done) ->
-  done null, user
-
-passport.deserializeUser (obj, done) ->
-  done null, obj
-
-passport.use strategies.twitter
-
-passport.use strategies.github
 
 app.configure ->
   app.use express.logger format: ':method :url :status'
   app.use express.cookieParser()
   app.use express.bodyParser()
   app.use express.session secret: SESSION_SECRET
-  app.use passport.initialize()
-  app.use passport.session()
+  app.use controllers.authentication(app)
   app.use express.static path.join __dirname, 'public'
   app.set 'views', path.join __dirname, 'views'
   app.set 'view engine', 'jade'
@@ -49,21 +32,6 @@ app.get '/', (req, res) ->
   res.render 'index', 
     user: req.user
     isLoggedIn: req.isAuthenticated()
-
-app.get '/login', (req, res) ->
-  res.render 'login', res.data
-
-app.get '/auth/github', passport.authenticate('github')
-
-app.get '/auth/twitter', passport.authenticate('twitter')
-
-app.get '/auth/github/callback', 
-  passport.authenticate('github', failureRedirect: '/login'), (req, res) ->
-    res.redirect '/'
-
-app.get '/auth/twitter/callback', 
-  passport.authenticate('twitter', failureRedirect: '/login'), (req, res) ->
-    res.redirect '/'
 
 app.get '/generate', ensureAuthenticated, (req, res) ->
   event.list req.user.id, (err, events) ->
