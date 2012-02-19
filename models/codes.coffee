@@ -5,9 +5,9 @@ generateUniqueIdentifier = (a, b) ->
   b
 
 generate = (count = 1) ->
-	if count > 0 then (generateUniqueIdentifier() for x in [0...count]) else []
-			
+  if count > 0 then (generateUniqueIdentifier() for x in [0...count]) else []
+      
 codes = 
-	generate: generate
+  generate: generate
 
 module.exports = codes
