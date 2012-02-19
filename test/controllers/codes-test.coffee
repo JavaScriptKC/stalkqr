@@ -1,6 +1,6 @@
 vows = require 'vows'
 assert = require 'assert'
-codes = require('../../controllers/codes')._internal
+codes = require('../../controllers/code')._internal
 
 SAMPLE_CODE = 'b4c09e3b-4311-4a8d-aa0a-2c2e77924c03'
 SAMPLE_HOST = 'example.com'

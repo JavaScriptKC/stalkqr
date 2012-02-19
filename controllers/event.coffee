@@ -1,4 +1,5 @@
 authentication = require './authentication'
+event = require '../models/event'
 
 module.exports = 
   use: (app) ->

@@ -1,6 +1,6 @@
 vows = require 'vows'
 assert = require 'assert'
-codes = require '../controllers/codes'
+codes = require '../models/codes'
 
 vows.describe('Codes').addBatch(
   'when a single code is being generated': 
