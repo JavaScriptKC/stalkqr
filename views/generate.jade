@@ -1,1 +1,16 @@
-img(src="https://chart.googleapis.com/chart?cht=qr&chs=512x512&chl=#{url}")
+form#generate-codes(method='post', action='/generate')
+  if !event_name
+    label What event?
+
+    select(name='event')
+      option select an event
+      for event in events
+        option(value=event.name)= event.name
+   else
+    h3 Generate codes for #{event_name}
+    input(type='hidden', value=event_name, name='event')
+                 
+  label How many?
+    input(type='text', name='count')
+
+  input(type='submit', value='generate')

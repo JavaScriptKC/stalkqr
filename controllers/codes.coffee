@@ -1,26 +1,13 @@
-internal =
-  generate: (code, host, render) ->
-    url = 'http://' + host + '/scan/' + code
-    render 'codes/generate', url: url
+generateUniqueIdentifier = (a, b) ->
+  b = a = ""
+  while a++ < 36
+    b += (if a * 51 & 52 then (if a ^ 15 then 8 ^ Math.random() * (if a ^ 20 then 16 else 4) else 4).toString(16) else "-")
+  b
 
-  scan: (code, redirect) ->
-    url = '/activate/' + code
-    redirect url, temporarily = 301
+generate = (count = 1) ->
+  if count > 0 then (generateUniqueIdentifier() for x in [0...count]) else []
+      
+codes = 
+  generate: generate
 
-  activate: (request, response) ->
-    response.render 'activate', code: request.params.code
-
-module.exports =
-  _internal: internal,
-
-  scan: (request, response) ->
-    code = request.params.code
-
-    _internal.scan code, response.redirect
-
-  generate: (request, response) ->
-    code = new Date().getTime()
-    host = request.header 'host'
-    render = response.render
-
-    _internal.generate code, host, render
+module.exports = codes

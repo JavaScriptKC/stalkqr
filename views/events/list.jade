@@ -1,0 +1,9 @@
+h2 Events
+
+ol
+  each event in events
+    li 
+      a(href='/event/' + event.name)= event.name + " "
+      span #{event.codes.length} codes
+
+a(href='/event/new') Create a new event

@@ -1,0 +1,12 @@
+- if (isLoggedIn)
+  p You are logged in as #{user.id}
+
+  ul
+    li 
+      a(href='/events') events
+    li
+      a(href='/generate') generate codes
+
+- else
+  p You are not logged in go  
+    a(href='/login') login
