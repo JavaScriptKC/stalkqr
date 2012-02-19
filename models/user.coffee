@@ -1,6 +1,24 @@
-module.exports = 
-  find_by_id: (id, callback) ->
-    callback null, id: id
+Model = require './model'
 
-  find_by_service: (service, service_id, callback) ->
-    callback null, id: service_id
+class User extends Model
+  constructor: (attributes = {}) ->
+    @name = attributes.name || undefined
+    @userSince = attributes.userSince || undefined
+    @slugs = attributes.slugs || []
+    @handles = attributes.handles || []
+    @credentials = attributes.credentials || []
+
+  setCredential: (provider, id, callback) =>
+    @credentials.push
+      provider: provider,
+      id: id
+
+    @save('user', callback)
+
+  toJSON: () =>
+    name: @name,
+    slugs: @slugs,
+    handles: @handles,
+    credentials: @credentials
+
+module.exports = User
