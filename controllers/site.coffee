@@ -1,5 +1,6 @@
-site =
-  index: (request, response) ->
-    response.render 'site/index'
-
-module.exports = site
+module.exports = 
+  use: (app) ->
+    app.get '/', (req, res) ->
+      res.render 'index', 
+        user: req.user
+        isLoggedIn: req.isAuthenticated()
