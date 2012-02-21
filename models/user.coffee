@@ -7,6 +7,7 @@ class User extends Model
     @slugs = attributes.slugs || []
     @handles = attributes.handles || []
     @credentials = attributes.credentials || []
+    @_id = attributes._id
 
   setCredential: (provider, id, callback) =>
     @credentials.push
@@ -16,9 +17,10 @@ class User extends Model
     @save('user', callback)
 
   toJSON: () =>
-    name: @name,
-    slugs: @slugs,
-    handles: @handles,
+    name: @name
+    slugs: @slugs
+    handles: @handles
     credentials: @credentials
-
+    _id: @_id
+    
 module.exports = User
