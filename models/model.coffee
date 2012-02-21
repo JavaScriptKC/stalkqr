@@ -1,8 +1,8 @@
 StoredObject = require '../data/storedObject'
 
 class Model extends StoredObject
-  save: (modelName, callback) ->
-    super @modelName, @toJSON(), callback
+  save: (collection, callback) ->
+    super @collection, @toJSON(), callback
 
   toJSON: () ->
     {}
