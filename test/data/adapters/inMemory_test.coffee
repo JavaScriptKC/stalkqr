@@ -6,7 +6,7 @@ sampleObjects = [
   { 'one': true, 'two': false }
 ]
 
-vows.describe('In-memory store (data/inMemory)').addBatch(
+vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
   '': {
     topic: () -> new InMemoryDataAdapter(),
 
