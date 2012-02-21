@@ -1,7 +1,6 @@
 vows = require 'vows'
 assert = require 'assert'
 User = require '../../models/user'
-storedObject = require '../../data/storedObject'
 
 expectedAttributes =
   name: 'Abraham Lincoln'               
@@ -11,8 +10,8 @@ expectedAttributes =
   credentials: [{provider: 'twitter', id: 1234 }]
   _id: 1234
     
-vows.describe('models/user').addBatch(
-  "Creating a user":
+vows.describe('User (models/user)').addBatch(
+  "When creating a user model":
     topic: () ->
       new User()
     "it should have default values": (user) ->
@@ -21,7 +20,7 @@ vows.describe('models/user').addBatch(
       assert.isArray user.slugs
       assert.isArray user.handles
       assert.isArray user.credentials
-  "Creating a user with attributes":
+  "Creating a user model from attributes":
     topic: () ->
       new User expectedAttributes   
     
