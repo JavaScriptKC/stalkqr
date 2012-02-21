@@ -14,5 +14,8 @@
   "devDependencies": {
     "vows": "~v0.6.1",
     "should": "~v0.5.1"
+  },
+  "scripts": {
+    test: "vows --spec"
   }
 }
