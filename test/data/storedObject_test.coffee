@@ -15,13 +15,13 @@ vows.describe('Base stored object (data/storedObject)').addBatch(
   '': {
     topic: () -> new StoredObject()
 
-    'when save is called': {
+    'when save() is called': {
       topic: (instance) -> 
         instance.save('testCollection', {
           'one': true
         }, @callback)
       
-      'it should call the adapter\'s save method': (err, attributes) ->
+      'it should call the adapter\'s save() method': (err, attributes) ->
         callCount.should.equal(1)
       
       'it should pass collection and attributes to the adapter': (err, attributes) ->
