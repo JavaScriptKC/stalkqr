@@ -83,7 +83,6 @@ vows.describe('User (models/user)').addBatch(
           user
 
         'it should override the existing value': (user) ->
-          console.log user.attributes.credentials
           assert.equal user.attributes.credentials.length, 1
           assert.equal user.attributes.credentials[0].provider, 'twitter'
           assert.equal user.attributes.credentials[0].id, 1234
