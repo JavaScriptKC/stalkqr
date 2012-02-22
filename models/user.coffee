@@ -1,26 +1,25 @@
 Model = require './model'
 
+defaults =
+  slugs: []
+  credentials: []
+  handles: []
+
 class User extends Model
-  constructor: (attributes = {}) ->
-    @name = attributes.name || undefined
-    @userSince = attributes.userSince || undefined
-    @slugs = attributes.slugs || []
-    @handles = attributes.handles || []
-    @credentials = attributes.credentials || []
-    @_id = attributes._id
-
-  setCredential: (provider, id, callback) =>
-    @credentials.push
-      provider: provider,
-      id: id
-
-    @save('user', callback)
-
-  toJSON: () =>
-    name: @name
-    slugs: @slugs
-    handles: @handles
-    credentials: @credentials
-    _id: @_id
+  constructor: (attributes = defaults) ->
+    super attributes
+  
+  setCredential: (provider, id) ->
+    @attributes.credentials or= []
     
+    existingAttributes = @attributes.credentials.filter (c) ->
+      c.provider.toLowerCase().trim() == provider.toLowerCase().trim()
+
+    if existingAttributes.length > 0
+      existingAttributes[0].id = id
+    else
+      @attributes.credentials.push 
+        provider: provider 
+        id: id
+      
 module.exports = User

@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "~v2.5.6",
     "coffee-script": "~v1.2.0",
+    "clone", "v0.0.4",
     "jade": "~v0.20.0",
     "stylus": "~v0.22.5",
     "passport": "~v0.1.6",
