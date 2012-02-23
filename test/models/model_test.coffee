@@ -54,7 +54,7 @@ vows.describe('Base model (models/model)').addBatch(
       'it should pass collection and callback to base object': (err, attributes) ->
         args[0].should.have.length(3)
         args[0][0].should.equal('testCollection')
-        args[0][2].should.equal(@callback)
+        args[0][2].should.not.be.null
     }
   }
 ).export(module)

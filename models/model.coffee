@@ -5,7 +5,10 @@ class Model extends StoredObject
     @attributes = attributes || {}
 
   save: (collection, callback) ->
-    super(collection, @toJSON(), callback)
+    super(collection, @toJSON(), (err, attributes) =>
+      @attributes = attributes if not err?
+      callback(err, attributes) if callback?
+    )
 
   toJSON: () ->
     JSON.parse(JSON.stringify(@attributes))
