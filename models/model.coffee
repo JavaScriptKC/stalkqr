@@ -1,8 +1,8 @@
 StoredObject = require '../data/storedObject'
 
 class Model extends StoredObject
-  constructor: (attributes) ->
-    @attributes = attributes || {}
+  constructor: (attributes = {}) ->
+    @attributes = attributes
 
   save: (collection, callback) ->
     super(collection, @toJSON(), (err, attributes) =>
