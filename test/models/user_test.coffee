@@ -15,31 +15,32 @@ vows.describe('User (models/user)').addBatch(
     topic: () ->
       new User()
     "it should have default values": (user) ->
-      assert.isUndefined user.name
-      assert.isUndefined user.userSince
-      assert.isArray user.slugs
-      assert.isArray user.handles
-      assert.isArray user.credentials
+      assert.isUndefined user.attributes.name
+      assert.isUndefined user.attributes.userSince
+      assert.isArray user.attributes.slugs
+      assert.isArray user.attributes.handles
+      assert.isArray user.attributes.credentials
+      
   "Creating a user model from attributes":
     topic: () ->
       new User expectedAttributes   
     
     "it should set the correct name": (user) ->
-      assert.equal user.name, expectedAttributes.name
+      assert.equal user.attributes.name, expectedAttributes.name
     
     "it should set the correct user since date": (user) ->
-      assert.equal user.userSince, expectedAttributes.userSince 
+      assert.equal user.attributes.userSince, expectedAttributes.userSince 
     
     "it should set the correct slugs": (user) ->
-      assert.deepEqual user.slugs, expectedAttributes.slugs
+      assert.deepEqual user.attributes.slugs, expectedAttributes.slugs
     
     "it should set the correct handles": (user) ->
-      assert.deepEqual user.handles, expectedAttributes.handles 
+      assert.deepEqual user.attributes.handles, expectedAttributes.handles 
     
     "it should set the correct credentials": (user) ->
-      assert.deepEqual user.credentials, expectedAttributes.credentials
+      assert.deepEqual user.attributes.credentials, expectedAttributes.credentials
     
     "it should set the correct id": (user) ->    
-      assert.equal user._id, expectedAttributes._id
+      assert.equal user.attributes._id, expectedAttributes._id
 
 ).export module
