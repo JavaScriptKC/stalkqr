@@ -1,6 +1,6 @@
 #Stalkqr
 
-[![Build Status](https://secure.travis-ci.org/joeandaverde/stalkqr.png?branch=master)](http://travis-ci.org/joeandaverde/stalkqr)
+[![Build Status](https://secure.travis-ci.org/adunkman/stalkqr.png?branch=master)](http://travis-ci.org/adunkman/stalkqr)
 
 An open source project by the NodeKC group. 
 
