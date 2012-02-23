@@ -3,18 +3,6 @@ should = require 'should'
 StoredObject = require '../../data/storedObject'
 Model = require '../../models/model'
 
-callCount = 0
-args = []
-
-getTopic = () ->
-  topic = new Model()
-  topic._adapter = 
-    save: (collection, attributes, callback) ->
-      callCount++;
-      args.push([collection, attributes, callback])
-      callback(null, attributes)
-  return topic
-
 vows.describe('Base model (models/model)').addBatch(
   '': {
     topic: () -> getTopic()
@@ -43,7 +31,7 @@ vows.describe('Base model (models/model)').addBatch(
         }
         instance.save('testCollection', @callback)
       
-      'it should call save() on the base stored object': (err, attributes) ->
+      'it should call save() on the base object': (err, attributes) ->
         callCount.should.equal(1)
         args.should.have.length(1)
         
@@ -51,10 +39,23 @@ vows.describe('Base model (models/model)').addBatch(
         args[0].should.have.length(3)
         args[0][1].should.eql({ 'one': true })
 
-      'it should pass collection and callback to base object': (err, attributes) ->
+      'it should pass collection and callback to base': (err, attributes) ->
         args[0].should.have.length(3)
         args[0][0].should.equal('testCollection')
         args[0][2].should.not.be.null
     }
   }
 ).export(module)
+
+callCount = 0
+args = []
+
+getTopic = () ->
+  topic = new Model()
+  topic._adapter = 
+    save: (collection, attributes, callback) ->
+      callCount++;
+      args.push([collection, attributes, callback])
+      callback(null, attributes)
+  return topic
+

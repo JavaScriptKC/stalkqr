@@ -1,10 +1,6 @@
 vows = require 'vows'
 should = require 'should'
 InMemoryDataAdapter = require '../../../data/adapters/inMemory'
-sampleObjects = [
-  { 'test': true, 'numeric': 52, 'items': ['one', 'two'] },
-  { 'one': true, 'two': false }
-]
 
 vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
   '': {
@@ -100,3 +96,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
   }
 ).export(module)
+
+sampleObjects = [
+  { 'test': true, 'numeric': 52, 'items': ['one', 'two'] },
+  { 'one': true, 'two': false }
+]

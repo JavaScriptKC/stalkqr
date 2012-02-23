@@ -2,18 +2,6 @@ vows = require 'vows'
 should = require 'should'
 StoredObject = require '../../data/storedObject'
 
-callCount = 0
-args = []
-
-getTopic = () ->
-  topic = new StoredObject()
-  topic._adapter = 
-    save: (collection, attributes, callback) ->
-      callCount++;
-      args.push([collection, attributes, callback])
-      callback(null, attributes)
-  return topic
-
 vows.describe('Base stored object (data/storedObject)').addBatch(
   '': {
     topic: () -> getTopic()
@@ -36,3 +24,15 @@ vows.describe('Base stored object (data/storedObject)').addBatch(
     }
   }
 ).export(module)
+
+callCount = 0
+args = []
+
+getTopic = () ->
+  topic = new StoredObject()
+  topic._adapter = 
+    save: (collection, attributes, callback) ->
+      callCount++;
+      args.push([collection, attributes, callback])
+      callback(null, attributes)
+  return topic

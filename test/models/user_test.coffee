@@ -1,14 +1,6 @@
 vows = require 'vows'
 should = require 'should'
 User = require '../../models/user'
-
-expectedAttributes =
-  name: 'Abraham Lincoln'               
-  userSince: new Date()
-  slugs: ['abe', 'penniesrock']
-  handles: [{type: 'twitter', handle: 'abelincoln'}]
-  credentials: [{provider: 'twitter', id: 1234 }]
-  _id: 1234
     
 vows.describe('User (models/user)').addBatch(
   'when creating a user model': {
@@ -44,3 +36,11 @@ vows.describe('User (models/user)').addBatch(
       user.attributes._id.should.equal(expectedAttributes._id)
   }
 ).export(module)
+
+expectedAttributes =
+  name: 'Abraham Lincoln'               
+  userSince: new Date()
+  slugs: ['abe', 'penniesrock']
+  handles: [{type: 'twitter', handle: 'abelincoln'}]
+  credentials: [{provider: 'twitter', id: 1234 }]
+  _id: 1234
