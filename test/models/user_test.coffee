@@ -1,5 +1,5 @@
 vows = require 'vows'
-assert = require 'assert'
+should = require 'should'
 User = require '../../models/user'
 
 expectedAttributes =
@@ -15,32 +15,32 @@ vows.describe('User (models/user)').addBatch(
     topic: () -> new User()
 
     'it should have default values': (user) ->
-      assert.isUndefined user.attributes.name
-      assert.isUndefined user.attributes.userSince
-      assert.isArray user.attributes.slugs
-      assert.isArray user.attributes.handles
-      assert.isArray user.attributes.credentials
+      should.strictEqual(user.attributes.name, undefined)
+      should.strictEqual(user.attributes.userSince, undefined)
+      user.attributes.slugs.should.have.length(0)
+      user.attributes.handles.should.have.length(0)
+      user.attributes.credentials.should.have.length(0)
   }
 
   'when creating a user model with attributes': {
     topic: () -> new User(expectedAttributes)
     
     'it should set the correct name': (user) ->
-      assert.equal user.attributes.name, expectedAttributes.name
+      user.attributes.name.should.equal(expectedAttributes.name)
     
     'it should set the correct user since date': (user) ->
-      assert.equal user.attributes.userSince, expectedAttributes.userSince 
+      user.attributes.userSince.should.equal(expectedAttributes.userSince)
     
     'it should set the correct slugs': (user) ->
-      assert.deepEqual user.attributes.slugs, expectedAttributes.slugs
+      user.attributes.slugs.should.eql(expectedAttributes.slugs)
     
     'it should set the correct handles': (user) ->
-      assert.deepEqual user.attributes.handles, expectedAttributes.handles 
+      user.attributes.handles.should.eql(expectedAttributes.handles)
     
     'it should set the correct credentials': (user) ->
-      assert.deepEqual user.attributes.credentials, expectedAttributes.credentials
+      user.attributes.credentials.should.eql(expectedAttributes.credentials)
     
     'it should set the correct id': (user) ->    
-      assert.equal user.attributes._id, expectedAttributes._id
+      user.attributes._id.should.equal(expectedAttributes._id)
   }
-).export module
+).export(module)
