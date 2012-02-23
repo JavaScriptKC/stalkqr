@@ -5,15 +5,18 @@ StoredObject = require '../../data/storedObject'
 callCount = 0
 args = []
 
-StoredObject::_adapter = 
-  save: (collection, attributes, callback) ->
-    callCount++;
-    args.push([collection, attributes, callback])
-    callback(null, attributes)
+getTopic = () ->
+  topic = new StoredObject()
+  topic._adapter = 
+    save: (collection, attributes, callback) ->
+      callCount++;
+      args.push([collection, attributes, callback])
+      callback(null, attributes)
+  return topic
 
 vows.describe('Base stored object (data/storedObject)').addBatch(
   '': {
-    topic: () -> new StoredObject()
+    topic: () -> getTopic()
 
     'when save() is called': {
       topic: (instance) -> 
@@ -26,8 +29,10 @@ vows.describe('Base stored object (data/storedObject)').addBatch(
       
       'it should pass collection and attributes to the adapter': (err, attributes) ->
         args.should.have.length(1)
+        args[0].should.have.length(3)
         args[0][0].should.equal('testCollection')
         args[0][1].should.eql({ 'one': true })
+        args[0][2].should.equal(@callback)
     }
   }
 ).export(module)
