@@ -5,57 +5,52 @@ Model = require '../../models/model'
 
 vows.describe('Base model (models/model)').addBatch(
   '': {
-    topic: () -> getTopic()
+    topic: () -> getModel()
 
-    'when toJSON() is called with no attributes': {
-      topic: (instance) -> 
-        instance.toJSON()
+    'when toJSON() is called when the model has no attributes': {
+      topic: (model) -> 
+        model.toJSON()
 
       'it should return an empty object': (jsonObject) ->
         jsonObject.should.eql({})
     }
 
-    'when toJSON() is called with attributes': {
-      topic: (instance) -> 
-        instance.attributes = { 'two': false }
-        instance.toJSON()
+    'when toJSON() is called when the model has attributes': {
+      topic: (model) -> 
+        model.attributes = { 'two': false }
+        model.toJSON()
 
       'it should return the attributes object': (jsonObject) ->
         jsonObject.should.eql({ 'two': false })
     }
 
     'when save() is called': {
-      topic: (instance) -> 
-        instance.attributes = {
-          'one': true
-        }
-        instance.save('testCollection', @callback)
+      topic: (model) -> 
+        model.attributes = { 'one': true }
+        model.save('testCollection', @callback)
       
       'it should call save() on the base object': (err, attributes) ->
-        callCount.should.equal(1)
-        args.should.have.length(1)
+        callsToSave.should.have.length(1)
         
       'it should pass model.attributes to the save()': (err, attributes) ->
-        args[0].should.have.length(3)
-        args[0][1].should.eql({ 'one': true })
+        callsToSave[0].should.have.length(3)
+        callsToSave[0][1].should.eql({ 'one': true })
 
       'it should pass collection and callback to base': (err, attributes) ->
-        args[0].should.have.length(3)
-        args[0][0].should.equal('testCollection')
-        args[0][2].should.not.be.null
+        callsToSave[0].should.have.length(3)
+        callsToSave[0][0].should.equal('testCollection')
+        callsToSave[0][2].should.not.be.null
     }
   }
 ).export(module)
 
-callCount = 0
-args = []
+callsToSave = []
 
-getTopic = () ->
-  topic = new Model()
-  topic._adapter = 
+getModel = () ->
+  model = new Model()
+  model._adapter = 
     save: (collection, attributes, callback) ->
-      callCount++;
-      args.push([collection, attributes, callback])
+      callsToSave.push([collection, attributes, callback])
       callback(null, attributes)
-  return topic
+  return model
 

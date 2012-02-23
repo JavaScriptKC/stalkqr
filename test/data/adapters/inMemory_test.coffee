@@ -6,15 +6,15 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
   '': {
     topic: () -> new InMemoryDataAdapter(),
 
-    'it should require no constructor arguments': (instance) ->
-      should.exist(instance)
+    'it should require no constructor arguments': (adapter) ->
+      should.exist(adapter)
     
-    'it should be empty when nothing has been added': (instance) ->
-      instance.items.should.eql({})
+    'it should be empty when nothing has been added': (adapter) ->
+      adapter.items.should.eql({})
     
     'when saving a new item': {
-      topic: (instance) ->
-        instance.save('testObjects', sampleObjects[0], @callback)
+      topic: (adapter) ->
+        adapter.save('testObjects', sampleObjects[0], @callback)
       
       'it should pass back the original attributes': (err, attributes) ->
         should.not.exist(err)
@@ -23,7 +23,7 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
         attributes.items.should.eql(['one', 'two'])
 
       'it should not simply use the same object in memory': (err, attributes) ->
-        # strict equal compares memory addresses
+        # standard equal compares memory addresses
         attributes.should.not.equal(sampleObjects[0]) 
 
       'it should add an _id attribute': (err, attributes) ->
@@ -32,8 +32,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
     
     'when updating an existing item': {
-      topic: (instance) ->
-        instance.save('testObjects', {
+      topic: (adapter) ->
+        adapter.save('testObjects', {
           '_id': 0
           'newObject': sampleObjects[1]
         }, @callback)
@@ -46,8 +46,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
 
     'when finding an object by real id': {
-      topic: (instance) ->
-        instance.find('testObjects', {
+      topic: (adapter) ->
+        adapter.find('testObjects', {
           '_id': 0
         }, @callback)
 
@@ -60,8 +60,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
 
     'when finding an object by a fake id': {
-      topic: (instance) ->
-        instance.find('testObjects', {
+      topic: (adapter) ->
+        adapter.find('testObjects', {
           '_id': 1
         }, @callback)
 
@@ -72,8 +72,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
 
     'when finding an object in a non-existent collection': {
-      topic: (instance) ->
-        instance.find('noTestObjects', {
+      topic: (adapter) ->
+        adapter.find('noTestObjects', {
           '_id': 0
         }, @callback)
       
@@ -84,8 +84,8 @@ vows.describe('In-memory store (data/adapters/inMemory)').addBatch(
     }
 
     'when searching with no parameters': {
-      topic: (instance) ->
-        instance.find('testObjects', {}, @callback)
+      topic: (adapter) ->
+        adapter.find('testObjects', {}, @callback)
       
       'it should return all items in the collection': (err, items) ->
         should.not.exist(err)
