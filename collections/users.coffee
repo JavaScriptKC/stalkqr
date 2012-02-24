@@ -11,8 +11,10 @@ class Users extends StoredCollection
     if arguments.length is 2
       [criteria, callback] = arguments
       
-    super('users', criteria, callback)
+    super(Users._collectionName, criteria, callback)
 
-  all: (callback) -> @find(callback)
+  all: (callback) -> 
+    @find(callback)
 
+Users._collectionName = 'users'
 module.exports = Users

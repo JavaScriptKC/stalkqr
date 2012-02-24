@@ -1,4 +1,5 @@
 Model = require './model'
+Users = require '../collections/users'
 
 class User extends Model
   constructor: (attributes = {}) ->
@@ -14,6 +15,9 @@ class User extends Model
       provider: provider,
       id: id
 
-    @save('user', callback)
+    @save(callback)
     
+  save: (callback) -> 
+    super(Users._collectionName, callback)
+
 module.exports = User
