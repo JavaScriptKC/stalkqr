@@ -4,6 +4,7 @@ Users = require '../collections/users'
 class User extends Model
   constructor: (attributes = {}) ->
     super 
+    @attributes._id or= undefined
     @attributes.name or= undefined
     @attributes.userSince or= undefined
     @attributes.slugs or= []
