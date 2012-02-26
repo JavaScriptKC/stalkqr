@@ -15,6 +15,7 @@ describe 'When creating a user from attributes', ->
   beforeEach ->
     user = new User expectedAttributes
 
+
   it 'should set the correct name', ->
     user.attributes.name.should.equal expectedAttributes.name
 

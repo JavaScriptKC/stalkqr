@@ -19,6 +19,6 @@
   },
   
   "scripts": {
-    "test": "vows --spec;jasmine-node spec --coffee --verbose"
+    "test": "make test"
   }
 }
