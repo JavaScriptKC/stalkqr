@@ -9,12 +9,21 @@ expectedAttributes =
   credentials: [{provider: 'twitter', id: 1234 }]
   _id: 1234
 
+callsToSave = []
+
+getUser = () ->
+  user = new User()
+  user._adapter = 
+    save: (collection, attributes, callback) ->
+      callsToSave.push([collection, callback])
+      callback(null, @attributes)
+  return user
+
 describe 'When creating a user from attributes', ->
   user = null
 
   beforeEach ->
     user = new User expectedAttributes
-
 
   it 'should set the correct name', ->
     user.attributes.name.should.equal expectedAttributes.name
@@ -121,3 +130,14 @@ describe 'When creating a user model', ->
         user.attributes.credentials.length.should.equal 2
         user.attributes.credentials[1].provider.should.equal 'github'
         user.attributes.credentials[1].id.should.equal 100
+
+describe 'when calling save() on a user', ->
+  user = getUser()
+  user.save ->
+
+  it 'should call save on the base model', ->
+    callsToSave.should.have.length(1)
+    callsToSave[0].should.have.length(2)
+
+  it 'should save to the \'users\' collection', ->
+    callsToSave[0][0].should.equal('users')
