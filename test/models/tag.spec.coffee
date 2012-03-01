@@ -13,7 +13,6 @@ expectedAttributes =
 callsToSave = []
 
 getTag = () ->
-  console.log 'calling gettag'
   tag = new Tag()
   tag._adapter = 
     save: (collection, attributes, callback) ->
