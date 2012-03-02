@@ -21,38 +21,39 @@ getTag = () ->
   return tag
 
 describe 'When creating a new tag', ->
-  tag = null
 
   beforeEach ->
-    tag = new Tag()
+    @tag = new Tag()
 
   it 'should have default attributes', ->
-    should.strictEqual(tag.attributes._id, undefined)
-    should.strictEqual(tag.attributes.user, undefined)
-    should.strictEqual(tag.attributes.event, undefined)
-    should.exist(tag.attributes.generatedOn)
-    should.exist(tag.attributes.code)
+    should.strictEqual(@tag.attributes._id, undefined)
+    should.strictEqual(@tag.attributes.user, undefined)
+    should.strictEqual(@tag.attributes.event, undefined)
+    should.exist(@tag.attributes.generatedOn)
+    should.exist(@tag.attributes.code)
 
 describe 'When creating a tag with attributes', -> 
-  tag = null
-
+  
   beforeEach ->
-    tag = new Tag(expectedAttributes)
+    @tag = new Tag(expectedAttributes)
     
   it 'should set the correct id', ->
-    tag.attributes._id.should.equal(expectedAttributes._id)
+    @tag.attributes._id.should.equal(expectedAttributes._id)
   
   it 'should set the correct generatedOn date', ->
-    tag.attributes.generatedOn.should.equal(expectedAttributes.generatedOn)
+    @tag.attributes.generatedOn.should.eql(expectedAttributes.generatedOn)
   
   it 'should set the correct code', ->
-    tag.attributes.code.should.equal(expectedAttributes.code)
+    @tag.attributes.code.should.equal(expectedAttributes.code)
   
   it 'should set the correct user', ->
-    tag.attributes.user.should.equal(expectedAttributes.user)
+    console.log @tag.attributes.user
+
+    console.log expectedAttributes.user
+    @tag.attributes.user.should.eql(expectedAttributes.user)
   
   it 'should set the correct event', ->
-    tag.attributes.event.should.equal(expectedAttributes.event)
+    @tag.attributes.event.should.eql(expectedAttributes.event)
 
   describe 'when calling save() on a tag', ->
     getTag().save ->

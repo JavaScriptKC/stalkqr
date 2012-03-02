@@ -14,44 +14,41 @@ getModel = (attribs) ->
   return model
 
 describe 'When a model is being created without attributes', ->
-  model = null
-  
+
   beforeEach ->
-    model = getModel()
+    @model = getModel()
 
   it 'should not have any attributes', ->
-    model.attributes.should.eql({})
+    @model.attributes.should.eql({})
 
   describe 'When toJSON() is called', ->
     beforeEach ->
-      jsonObject = model.toJSON()
+      @jsonObject = @model.toJSON()
 
     it 'should return an empty object', ->
-      jsonObject.should.eql({})
+      @jsonObject.should.eql({})
 
 describe 'When a model is created with attributes', ->
-  model = null
 
   beforeEach ->
-    model = new Model(two: false)
+    @model = new Model(two: false)
 
   it 'should have the correct attributes', ->
-    model.attributes.should.eql two: false 
+    @model.attributes.should.eql two: false 
 
   describe 'When toJSON() is called', ->
-    modelJson = null
     
     beforeEach ->
-      modelJson = model.toJSON()
+      @modelJson = @model.toJSON()
 
     it 'should return the attributes object', ->
-      modelJson.should.eql({ 'two': false })
+      @modelJson.should.eql({ 'two': false })
 
 describe 'when save() is called', ->
 
-  model = getModel({'one': true})
-
-  model.save 'testCollection', ->
+  beforeEach ->
+    @model = getModel({'one': true})
+    @model.save 'testCollection', ->
 
   it 'should call save() on the base object', ->
     callsToSave.should.have.length(1)
