@@ -7,13 +7,13 @@ class InMemoryDataAdapter
     if attributes._id? then @update(collection, attributes, callback)
     else @insert(collection, attributes, callback)
 
-  find: (collection, critera, callback) =>
+  find: (collection, criteria, callback) =>
     results = []
 
     for item in @items[collection] || []
       allTrue = true
 
-      for name, value of critera
+      for name, value of criteria
         if item[name] isnt value
           allTrue = false
       

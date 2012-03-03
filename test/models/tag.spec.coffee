@@ -46,12 +46,6 @@ describe 'When creating a tag with attributes', ->
   it 'should set the correct code', ->
     @tag.attributes.code.should.equal(expectedAttributes.code)
   
-  it 'should set the correct user', ->
-    console.log @tag.attributes.user
-
-    console.log expectedAttributes.user
-    @tag.attributes.user.should.eql(expectedAttributes.user)
-  
   it 'should set the correct event', ->
     @tag.attributes.event.should.eql(expectedAttributes.event)
 
