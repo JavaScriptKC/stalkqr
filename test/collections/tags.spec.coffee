@@ -1,4 +1,3 @@
-vows = require 'vows'
 should = require 'should'
 Tags = require '../../collections/tags'
 

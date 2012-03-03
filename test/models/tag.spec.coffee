@@ -1,4 +1,3 @@
-vows = require 'vows'
 should = require 'should'
 Tag = require '../../models/tag'
 User = require '../../models/user'

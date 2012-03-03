@@ -1,4 +1,3 @@
-vows = require 'vows'
 should = require 'should'
 StoredObject = require '../../data/storedObject'
 Model = require '../../models/model'
