@@ -16,7 +16,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
   it 'should be empty when nothing has been added', ->
     @adapter.items.should.eql({})
 
-  describe('when saving a new item', ->
+  describe('saving a new item', ->
     beforeEach (done) ->
       @adapter.save('testObjects', sampleObjects[0], (e, a) =>
         @attributes = a
@@ -39,7 +39,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
       @attributes._id.should.equal(0)
   )
 
-  describe('when updating an existing item', ->
+  describe('updating an existing item', ->
     beforeEach (done) ->
       attributes = { '_id': 0, 'newObject': sampleObjects[1] }
       @adapter.save('testObjects', attributes, (e, a) =>
@@ -55,7 +55,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
       @attributes.newObject.should.eql(sampleObjects[1])
   )
 
-  describe('When finding an object by real id', ->
+  describe('finding an object by real id', ->
     beforeEach (done) ->
       @adapter.save('testObjects', sampleObjects[0], (e, a) =>
         @adapter.find('testObjects', {'_id': 0}, (e, i) =>
@@ -72,7 +72,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
       @foundItems[0]._id.should.equal(0)
   )
 
-  describe('when finding an object by a fake id', ->
+  describe('finding an object by a fake id', ->
     beforeEach (done) ->
       @adapter.find('testObjects', {'_id': 1}, (e, i) =>
         @err = e
@@ -86,7 +86,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
       @foundItems.should.have.length(0)
   )
 
-  describe('when finding an object in a non-existent collection', ->
+  describe('finding an object in a non-existent collection', ->
     beforeEach (done) ->
       @adapter.find('notestObjects', {'_id': 0}, (e, i) =>
         @err = e
@@ -100,7 +100,7 @@ describe('In-memory store (data/adapters/inMemory)', ->
       @foundItems.should.have.length(0)
   )
 
-  describe('when searching with no parameters', ->
+  describe('searching with no parameters', ->
     beforeEach (done) ->
       @adapter.save('testObjects', sampleObjects[0], (e, a) =>
         @adapter.find('testObjects', {}, (e, i) =>

@@ -12,7 +12,7 @@ getStoredObject = () ->
   return storedObject
 
 describe('StoredObject (data/storedObject)', ->
-  describe('when save() is called', ->
+  describe('calling save()', ->
     expectedCallback = ->
 
     getStoredObject().save('testCollection', { 'one': true }, expectedCallback)

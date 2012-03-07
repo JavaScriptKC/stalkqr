@@ -20,7 +20,7 @@ getTag = () ->
   return tag
 
 describe('Tag (models/tag)', ->
-  describe('when creating a new tag', ->
+  describe('creating a new tag', ->
     beforeEach ->
       @tag = new Tag()
 
@@ -32,7 +32,7 @@ describe('Tag (models/tag)', ->
       should.exist(@tag.attributes.code)
   )
 
-  describe('when creating a tag with attributes', ->
+  describe('creating a tag with attributes', ->
     beforeEach ->
       @tag = new Tag(expectedAttributes)
 
@@ -48,7 +48,7 @@ describe('Tag (models/tag)', ->
     it 'should set the correct event', ->
       @tag.attributes.event.should.eql(expectedAttributes.event)
 
-    describe('and save() is called', ->
+    describe('and calling save()', ->
       getTag().save(->)
 
       it 'should call save on the base model', ->

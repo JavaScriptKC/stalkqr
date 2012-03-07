@@ -13,7 +13,7 @@ getTags = (key) ->
   return tags
 
 describe('Tags (collections/tags)', ->
-  describe('when find() is called with criteria and a callback', ->
+  describe('calling find() with criteria and a callback', ->
     getTags('test1').find({ 'one': true }, ->)
 
     it 'should call find() in \'tags\' collection on base', ->

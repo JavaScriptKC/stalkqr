@@ -20,7 +20,7 @@ getUser = () ->
   return user
 
 describe('User (models/user)', ->
-  describe('when creating a user from attributes', ->
+  describe('creating a user from attributes', ->
     beforeEach ->
       @user = new User(expectedAttributes)
 
@@ -42,7 +42,7 @@ describe('User (models/user)', ->
     it 'should set the correct id', ->
       @user.attributes._id.should.equal(expectedAttributes._id)
 
-    describe('and to toJSON() is called', ->
+    describe('and calling toJSON()', ->
       beforeEach ->
         @userJson = @user.toJSON()
 
@@ -66,7 +66,7 @@ describe('User (models/user)', ->
     )
   )
 
-  describe('when creating a user model', ->
+  describe('creating a user model', ->
     beforeEach ->
       @user = new User()
 
@@ -79,7 +79,7 @@ describe('User (models/user)', ->
       @user.attributes.handles.should.be.empty
       @user.attributes.credentials.should.be.empty
 
-    describe('and toJSON() is called', ->
+    describe('and calling toJSON()', ->
       beforeEach ->
         @userJson = @user.toJSON()
 
@@ -99,7 +99,7 @@ describe('User (models/user)', ->
         @userJson.handles.should.be.empty
     )
 
-    describe('and a new credential is added', ->
+    describe('and adding a new credential', ->
       beforeEach ->
         @user.setCredential('twitter', 1865)
 
@@ -108,7 +108,7 @@ describe('User (models/user)', ->
         @user.attributes.credentials[0].provider.should.equal('twitter')
         @user.attributes.credentials[0].id.should.equal(1865)
 
-      describe('and the same credential is added with different casing', ->
+      describe('and adding the same credential with different capitalization', ->
         beforeEach ->
           @user.setCredential('Twitter', 1337)
 
@@ -118,7 +118,7 @@ describe('User (models/user)', ->
           @user.attributes.credentials[0].id.should.equal(1337)
       )
 
-      describe('and a completely different credential is added', ->
+      describe('and adding a completely different credential', ->
         beforeEach ->
           @user.setCredential('github', 100)
 
@@ -130,7 +130,7 @@ describe('User (models/user)', ->
     )
   )
 
-  describe('when calling save() on a user', ->
+  describe('calling save() on a user', ->
     beforeEach ->
       @user = getUser()
       @user.save(->)

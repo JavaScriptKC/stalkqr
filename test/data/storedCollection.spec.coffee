@@ -12,7 +12,7 @@ getStoredCollection = () ->
   return storedCollection
 
 describe('StoredCollection (data/storedCollection)', ->
-  describe('when find() is called', ->
+  describe('calling find()', ->
     expectedCallback = ->
     getStoredCollection().find('testCollection', {'one': true }, expectedCallback)
 

@@ -13,14 +13,14 @@ getModel = (attribs) ->
   return model
 
 describe('Model (models/model)', ->
-  describe('when a model is being created without attributes', ->
+  describe('creating a model without attributes', ->
     beforeEach ->
       @model = getModel()
 
     it 'should not have any attributes', ->
       @model.attributes.should.eql({})
 
-    describe('and toJSON() is called', ->
+    describe('and calling toJSON()', ->
       beforeEach ->
         @jsonObject = @model.toJSON()
 
@@ -29,14 +29,14 @@ describe('Model (models/model)', ->
     )
   )
 
-  describe('when a model is created with attributes', ->
+  describe('creating with attributes', ->
     beforeEach ->
       @model = new Model(two: false)
 
     it 'should have the correct attributes', ->
       @model.attributes.should.eql two: false
 
-    describe('and toJSON() is called', ->
+    describe('and calling toJSON()', ->
       beforeEach ->
         @modelJson = @model.toJSON()
 
@@ -45,7 +45,7 @@ describe('Model (models/model)', ->
     )
   )
 
-  describe('when save() is called', ->
+  describe('calling save()', ->
     beforeEach ->
       @model = getModel({'one': true})
       @model.save 'testCollection', ->

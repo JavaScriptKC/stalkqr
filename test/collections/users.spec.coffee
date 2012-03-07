@@ -13,7 +13,7 @@ getUsers = (key) ->
   return users
 
 describe('Users (collections/users)', ->
-  describe('when find() is called with just a callback', ->
+  describe('calling find() with just a callback', ->
     getUsers('test1').find(->)
 
     it 'should call find() in \'users\' collection on base', ->
@@ -25,7 +25,7 @@ describe('Users (collections/users)', ->
         callsToFind.test1[0][1].should.eql({})
   )
 
-  describe('when find() is called with criteria and a callback', ->
+  describe('calling find() with criteria and a callback', ->
     getUsers('test2').find({ 'one': true }, ->)
 
     it 'should call find() in \'users\' collection on base', ->
@@ -37,7 +37,7 @@ describe('Users (collections/users)', ->
       callsToFind.test2[0][1].should.eql({ 'one': true })
   )
 
-  describe('when all() is called', ->
+  describe('calling all()', ->
     getUsers('test3').all(->)
 
     it 'should call find() in \'users\' collection on base', ->
