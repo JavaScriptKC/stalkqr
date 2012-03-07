@@ -13,47 +13,50 @@ callsToSave = []
 
 getTag = () ->
   tag = new Tag()
-  tag._adapter = 
+  tag._adapter =
     save: (collection, attributes, callback) ->
       callsToSave.push([collection, callback])
       callback(null, @attributes)
   return tag
 
-describe 'When creating a new tag', ->
+describe('Tag (models/tag)', ->
+  describe('when creating a new tag', ->
+    beforeEach ->
+      @tag = new Tag()
 
-  beforeEach ->
-    @tag = new Tag()
+    it 'should have default attributes', ->
+      should.strictEqual(@tag.attributes._id, undefined)
+      should.strictEqual(@tag.attributes.user, undefined)
+      should.strictEqual(@tag.attributes.event, undefined)
+      should.exist(@tag.attributes.generatedOn)
+      should.exist(@tag.attributes.code)
+  )
 
-  it 'should have default attributes', ->
-    should.strictEqual(@tag.attributes._id, undefined)
-    should.strictEqual(@tag.attributes.user, undefined)
-    should.strictEqual(@tag.attributes.event, undefined)
-    should.exist(@tag.attributes.generatedOn)
-    should.exist(@tag.attributes.code)
+  describe('when creating a tag with attributes', ->
+    beforeEach ->
+      @tag = new Tag(expectedAttributes)
 
-describe 'When creating a tag with attributes', -> 
-  
-  beforeEach ->
-    @tag = new Tag(expectedAttributes)
-    
-  it 'should set the correct id', ->
-    @tag.attributes._id.should.equal(expectedAttributes._id)
-  
-  it 'should set the correct generatedOn date', ->
-    @tag.attributes.generatedOn.should.eql(expectedAttributes.generatedOn)
-  
-  it 'should set the correct code', ->
-    @tag.attributes.code.should.equal(expectedAttributes.code)
-  
-  it 'should set the correct event', ->
-    @tag.attributes.event.should.eql(expectedAttributes.event)
+    it 'should set the correct id', ->
+      @tag.attributes._id.should.equal(expectedAttributes._id)
 
-  describe 'when calling save() on a tag', ->
-    getTag().save ->
+    it 'should set the correct generatedOn date', ->
+      @tag.attributes.generatedOn.should.eql(expectedAttributes.generatedOn)
 
-    it 'should call save on the base model', ->
-      callsToSave.should.have.length(1)
-      callsToSave[0].should.have.length(2)
+    it 'should set the correct code', ->
+      @tag.attributes.code.should.equal(expectedAttributes.code)
 
-    it 'should save to the \'tags\' collection', ->
-      callsToSave[0][0].should.equal('tags')
+    it 'should set the correct event', ->
+      @tag.attributes.event.should.eql(expectedAttributes.event)
+
+    describe('and save() is called', ->
+      getTag().save(->)
+
+      it 'should call save on the base model', ->
+        callsToSave.should.have.length(1)
+        callsToSave[0].should.have.length(2)
+
+      it 'should save to the \'tags\' collection', ->
+        callsToSave[0][0].should.equal('tags')
+    )
+  )
+)

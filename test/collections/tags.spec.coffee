@@ -12,14 +12,16 @@ getTags = (key) ->
       callback(null, [])
   return tags
 
-describe 'When find() is called for Tags with criteria and a callback', ->
-  getTags('test1').find { 'one': true }, ->
+describe('Tags (collections/tags)', ->
+  describe('when find() is called with criteria and a callback', ->
+    getTags('test1').find({ 'one': true }, ->)
 
-  it 'should call find() in \'tags\' collection on base', ->
-    callsToFind.test1.should.have.length(1)
-    callsToFind.test1[0].should.have.length(3)
-    callsToFind.test1[0][0].should.equal('tags')
+    it 'should call find() in \'tags\' collection on base', ->
+      callsToFind.test1.should.have.length(1)
+      callsToFind.test1[0].should.have.length(3)
+      callsToFind.test1[0][0].should.equal('tags')
 
-  it 'should call find() with criteria on base', ->
-    callsToFind.test1[0][1].should.eql({ 'one': true })
-
+    it 'should call find() with criteria on base', ->
+      callsToFind.test1[0][1].should.eql({ 'one': true })
+  )
+)
