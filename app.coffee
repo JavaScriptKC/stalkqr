@@ -6,7 +6,7 @@ app = express.createServer()
 port = process.env.PORT || 3000
 sessionSecret = process.env.SESSION_SECRET || 'stalkqr'
 
-controllers = 
+controllers =
   authentication: require './controllers/authentication'
   site: require './controllers/site'
   code: require './controllers/code'
@@ -22,18 +22,21 @@ app.configure ->
   app.set 'view engine', 'jade'
 
 app.configure 'development', ->
-  app.use stylus.middleware 
-    src: path.join __dirname, 'public' 
-  
+  app.use stylus.middleware
+    src: path.join __dirname, 'public'
+
 app.configure 'production', ->
-  app.use stylus.middleware 
-    src: path.join __dirname, 'public' 
+  app.use stylus.middleware
+    src: path.join __dirname, 'public'
     compress: true
 
 controllers.authentication.use app
 controllers.site.use app
 controllers.code.use app
 controllers.event.use app
+
+app.get '/generate', bitly.generate, (req, res) ->
+  res.render 'layout', res.data
 
 app.listen port
 
