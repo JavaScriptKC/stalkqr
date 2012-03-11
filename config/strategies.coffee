@@ -11,14 +11,15 @@ GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || 'notvalidkey'
 GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || 'notvalidkey'
 GITHUB_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/github/callback'
 
-
 twitterDone = (accessToken, tokenSecret, profile, callback) ->
-  users = new Users()
-  users.find_by_service 'twitter', profile.id, callback
+  authDone 'twitter', profile, callback
 
 githubDone = (accessToken, tokenSecret, profile, callback) ->
+  authDone 'github', profile, callback
+
+authDone = (provider, profile, callback) ->
   users = new Users()
-  users.find_by_service 'github', profile.id, callback
+  users.find_by_service provider, profile, callback
 
 twitter = new TwitterStrategy
   consumerKey: TWITTER_CONSUMER_KEY
@@ -35,3 +36,4 @@ github = new GitHubStrategy
 module.exports = 
   twitter: twitter
   github: github
+
