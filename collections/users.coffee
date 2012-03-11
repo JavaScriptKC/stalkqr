@@ -2,6 +2,9 @@ StoredCollection = require '../data/storedCollection'
 
 class Users extends StoredCollection
   constructor: () -> super
+  
+  find_by_service: (provider, id, callback) ->
+    @find { provider: provider, id: id }, callback
 
   find: () ->
     if arguments.length is 1

@@ -35,9 +35,6 @@ controllers.site.use app
 controllers.code.use app
 controllers.event.use app
 
-app.get '/generate', bitly.generate, (req, res) ->
-  res.render 'layout', res.data
-
 app.listen port
 
 console.log 'server listening on port ' + port
