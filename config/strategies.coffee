@@ -1,7 +1,7 @@
 url = require 'url'
 GitHubStrategy = require('passport-github').Strategy
 TwitterStrategy = require('passport-twitter').Strategy
-user = require '../models/user'
+Users = require '../collections/users'
 
 TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || 'notvalidkey'
 TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET || 'notvalidkey'
@@ -12,10 +12,14 @@ GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || 'notvalidkey'
 GITHUB_CALLBACK_URL = url.resolve process.env.CALLBACK_BASE_URL, '/auth/github/callback'
 
 twitterDone = (accessToken, tokenSecret, profile, callback) ->
-  user.find_by_service 'twitter', profile.id, callback
+  authDone 'twitter', profile, callback
 
 githubDone = (accessToken, tokenSecret, profile, callback) ->
-  user.find_by_service 'github', profile.id, callback
+  authDone 'github', profile, callback
+
+authDone = (provider, profile, callback) ->
+  users = new Users()
+  users.find_by_service provider, profile, callback
 
 twitter = new TwitterStrategy
   consumerKey: TWITTER_CONSUMER_KEY
@@ -32,3 +36,4 @@ github = new GitHubStrategy
 module.exports = 
   twitter: twitter
   github: github
+

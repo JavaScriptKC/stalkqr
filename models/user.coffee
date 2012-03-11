@@ -1,6 +1,33 @@
-module.exports = 
-  find_by_id: (id, callback) ->
-    callback null, id: id
+Model = require './model'
+Users = require '../collections/users'
 
-  find_by_service: (service, service_id, callback) ->
-    callback null, id: service_id
+defaults =
+  slugs: []
+  credentials: []
+  handles: []
+
+class User extends Model
+  constructor: (attributes = defaults) ->
+    super
+    @attributes._id or= undefined
+    @attributes.name or= undefined
+    @attributes.userSince or= undefined
+    @attributes.slugs or= []
+    @attributes.handles or= []
+    @attributes.credentials or= []
+
+  setCredential: (provider, id) ->
+    existingAttributes = @attributes.credentials.filter (c) ->
+      c.provider.toLowerCase().trim() == provider.toLowerCase().trim()
+    
+    if existingAttributes.length > 0
+      existingAttributes[0].id = id
+    else
+      @attributes.credentials.push 
+        provider: provider 
+        id: id
+        
+  save: (callback) -> 
+    super(Users._collectionName, callback)
+      
+module.exports = User
